@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -33,6 +35,8 @@ public class BluetoothExchangeActivity extends Activity {
       Intent intent = new Intent(this, SetupUserDataActivity.class);
       startActivity(intent);
     }
+    
+    SetupApplication.setUpBluetooth(this, twitterId);
 
     final Activity activity = this;
 
@@ -54,13 +58,36 @@ public class BluetoothExchangeActivity extends Activity {
         SetupApplication.setDiscoverable(activity);
       }
     });
+    
+    Button setup = (Button) findViewById(R.id.setup);
+    setup.setOnClickListener(new OnClickListener() {
+      
+      @Override
+      public void onClick(View v) {
+        startActivity(new Intent(getApplicationContext(), SetupUserDataActivity.class));
+      }
+    });
+    
+    
 
-    List<User> userList = null;
+    ArrayList<User> userList = new ArrayList<User>();
 
-    ListView list = (ListView) findViewById(R.id.device_list);
+    ListView list = (ListView) findViewById(R.id.list);
     UserListAdapter adapter = new UserListAdapter(userList, this); //set user list
     mScanner = new BluetoothScanner(this, adapter, userList);
     list.setAdapter(adapter);
+    
+    list.setOnItemClickListener(new OnItemClickListener() {
+
+      @Override
+      public void onItemClick(AdapterView<?> adapter, View arg1, int position, long arg3) {
+        User user = (User) adapter.getItemAtPosition(position);
+        Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
+        intent.putExtra(SetupApplication.TWITTER_ID, user.getTwitterId());
+        startActivity(intent);
+        
+      }
+    });
 
   }
 
@@ -77,16 +104,22 @@ public class BluetoothExchangeActivity extends Activity {
 
     @Override
     public int getCount() {
+      if (mUserList == null)
+        return 0;
       return mUserList.size();
     }
 
     @Override
     public Object getItem(int pos) {
+      if (mUserList == null)
+        return null;
       return mUserList.get(pos);
     }
 
     @Override
     public long getItemId(int pos) {
+      if (mUserList == null)
+        return 0;
       return mUserList.get(pos).getId();
     }
 

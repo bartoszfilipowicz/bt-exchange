@@ -34,7 +34,7 @@ public class BluetoothScanner {
   private Activity mActivity;
   private BluetoothAdapter mBluetoothAdapter;
   protected BaseAdapter mAdapter;
-  protected ArrayList<String> mFoundDevicesList;
+  protected ArrayList<User> mFoundDevicesList;
   
   // Create a BroadcastReceiver for ACTION_FOUND
   private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -51,11 +51,11 @@ public class BluetoothScanner {
                   Log.d(LOG_CAT, "Finished discovery. Found devices " + mList.size());
                   for (String s : mList) {
                           //Log.d(LOG_CAT, s);
-                          if (s.startsWith(BLUETOOTH_PREFIX)) {
+                          if ((s != null) && s.startsWith(BLUETOOTH_PREFIX)) {
                                   
                                   String id = s.substring(BLUETOOTH_PREFIX.length());
                                   Log.d(LOG_CAT, "Connect to: " + id);
-                                  mFoundDevicesList.add(id);
+                                  mFoundDevicesList.add(new User(id));
                                   mAdapter.notifyDataSetChanged(); // not here
                           }
                   }
@@ -65,12 +65,11 @@ public class BluetoothScanner {
       }
   };
   
-  public BluetoothScanner(Activity context, UserListAdapter adapter, List<User> userList) {
+  public BluetoothScanner(Activity context, UserListAdapter adapter, ArrayList<User> userList) {
     mActivity = context;
     mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     mAdapter = adapter;
-    
-//    mFoundDevicesList = userList;
+    mFoundDevicesList = userList;
   }
   
   public int getCount(){
@@ -80,15 +79,15 @@ public class BluetoothScanner {
   public String getElementId(){
     return null; //device id
   }
-  
-  public static User getUserFromServer(String id){
-    HttpClient client = getNewHttpClient();
-    // execute request
-    // parse result to User object
-    // return user 
-    User user = new User();
-    return user;
-  }
+//  
+//  public static User getUserFromServer(String id){
+//    HttpClient client = getNewHttpClient();
+//    // execute request
+//    // parse result to User object
+//    // return user 
+//    User user = new User("xx");
+//    return user;
+//  }
   
   public static HttpClient getNewHttpClient() {
     try {

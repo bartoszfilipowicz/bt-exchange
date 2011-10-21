@@ -39,6 +39,7 @@ public class SetupApplication {
     Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
     discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
     context.startActivity(discoverableIntent);
+    context.finish();
   }
 
 }

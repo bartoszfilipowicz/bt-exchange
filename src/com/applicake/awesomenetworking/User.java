@@ -7,6 +7,9 @@ public class User { //User bean
   private int id;
   private String twitterId;
   
+  public User(String twitter) {
+    this.twitterId = twitter;
+  }
   public int getId() {
     return id;
   }
@@ -23,7 +26,7 @@ public class User { //User bean
   public static User fromJSONObject(String jsonInString) throws JSONException{
     
     JSONObject userObject = new JSONObject(jsonInString);
-    User user = new User();
+    User user = new User("xx");
     user.setId(userObject.getInt("id"));
     user.setTwitterId(userObject.getString("twitter"));
     return user;

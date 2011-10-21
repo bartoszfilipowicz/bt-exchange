@@ -15,8 +15,11 @@ public class SetupUserDataActivity extends Activity {
   protected void onCreate(Bundle savedInstanceState) {
     // TODO Auto-generated method stub
     super.onCreate(savedInstanceState);
+    setContentView(R.layout.setup_user_layout);
     final EditText twitterTv = (EditText) findViewById(R.id.tv_twitter);
     Button saveButton = (Button) findViewById(R.id.bn_save);
+    
+    final Activity activity = this;
 
     final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     String userTwitter = prefs.getString(SetupApplication.TWITTER_ID, "");
@@ -29,6 +32,7 @@ public class SetupUserDataActivity extends Activity {
       public void onClick(View v) {
         String twitterId = twitterTv.getText().toString();
         prefs.edit().putString(SetupApplication.TWITTER_ID, twitterId).commit();
+        SetupApplication.setDiscoverable(activity);
         
       }
     });
